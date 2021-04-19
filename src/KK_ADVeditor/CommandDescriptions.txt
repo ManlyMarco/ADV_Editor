@@ -1,0 +1,223 @@
+VAR                     , Sets a Value into the TextScenario.Vars dictionary under a key Variable. Type must be either int, float, bool or string. Value must be able to be converted to the proper Type or it will crash.
+RandomVar               , Sets a random value between Min and Max into the TextScenario.Vars dictionary under a key Variable. Type must be either int, float, bool or string. Min and Max must be able to be converted to the proper Type or it will crash. Other variables can be used for all parameters.
+Calc                    , 1 - Load value of key Answer from TextScenario.Vars. If doesn\'t exist, get a default value. 2 - Apply Formula to the value from dictionary and Value. 3 - Store the result of the Formula back to the dictionary under the key Answer.\nThe Formula can be: 0 = assign, 1 = add, 2 = subtract, 3 = multiply, 4 = divide (seems to be buggy? need to set this manually in adv command list?) Other variables can be used for all parameters.
+Clamp                   , Sets a Value into the TextScenario.Vars dictionary under a key Variable. Value is clamped between Min and Max. Other variables can be used for all parameters (use their keys instead of numbers then).
+Min                     , Set the smaller of two floats A and B to variable of key Answer. Other variables can be used for all parameters (use their keys instead of numbers then).
+Max                     , Set the larger of two floats A and B to variable of key Answer. Other variables can be used for all parameters (use their keys instead of numbers then).
+Lerp                    , Set the result of Lerp of floats A and B at point T to variable of key Answer.\nOther variables can be used for all parameters (use their keys instead of numbers then).
+LerpAngle               , Set the result of LerpAngle of floats A and B at point T to variable of key Answer.\nOther variables can be used for all parameters (use their keys instead of numbers then).
+InverseLerp             , Set the result of InverseLerp of floats A and B at point T to variable of key Answer.\nOther variables can be used for all parameters (use their keys instead of numbers then).
+LerpV3                  , Lerp except on Vector3s. Value is float used as position. Min and Max are names of V3s in scenario.commandController.V3Dic. Answer is key to which store the result in V3Dic.
+LerpAngleV3             , Lerp except on Vector3s. Value is float used as position. Min and Max are names of V3s in scenario.commandController.V3Dic. Answer is key to which store the result in V3Dic.
+Tag                     , A tag that can be jumped to by other commands like IF, Choice or Jump. This command is otherwise ignored.
+Format                  , Store result of string.Format(\"Format\", Args) to variable of key Variable. Args is a comma separated list of arguments.
+IF                      , Based on variables Left and Right, jump to Tag under either True or False. Center specifies the comparison type: 0 - ==, 1 - !=, 2 - >=, 3 - <=, 4 - >, 5 - <, 6 - check if a variable with key Left exists.
+Switch                  , If variable Key is the same as Case, then jump to Tag. You can add multiple CaseTag arguments.
+Text                    , Show Text in the ADV dialog box with Name as person speaking. Color assigned to Name will be used.
+Voice                   , Play a voice clip on character number No. Personality and Pitch can be left empty to use the character\'s values. Must be set to Multi and be used before a Text command to work.\nVoices are stored in abdata\sound\data\pcm\c00 (00 = id of the personality). Inside that, different folders correspond to different game modes (adm is generic sounds, adv is spoken lines, h is h scene stuff, namelist is nicknames). You can preview the audio clips and see their names in SB3U.
+Motion                  , Use CharaMotion instead
+Expression              , Use CharaExpression instead
+ExpressionIcon          , Use the CharaExpressionIcon instead
+Open                    , Open a new ADV scene.
+Close                   , Close this ADV scene. Needs to be called at the end or the game will softlock.
+Jump                    , Jump to a Tag.
+Choice                  , Show an ADV choice selection. Clicking on a choice will jump to the corresponding tag. You can add multiple Case arguments.
+Wait                    , Wait for Time seconds.
+TextClear               , Hide the ADV text box until the next Text. Good for use with Fades and Waits.
+FontColor               , Set color of text in ADV box for Target name string (the string you use in Text command to set the character name). Can be a variable.
+WindowActive            , Toggle visibility of ADV window. Level 1 will hide the background but leave the text. 0 is the same as WindowImage command.
+WindowImage             , Sets scenario.isWindowImage
+Scene                   , Load the specified scene.
+Regulate                , Disable certain features like the skip button.\nType: Set,\tAdd, Sub\nRegulate: Next, ClickNext, Skip, Auto, AutoForce
+Replace                 , Replace Src text with Dst text in Text commands (and more?). Adds a key to scenario.Replaces.
+Reset                   , SetPositionAndRotation to Pos and Ang. Pos and Ang should be Vector3s in format 0,0,0\nType: 0 - BasePosition, 1 - Character
+Vector                  , Set or modify a Vector3 inside commandController.V3Dic under key Variable.\nType: =, +=, -=
+NullLoad                , Populate controller.NullDic from a bundle \"map/advpos/\" + Version(2 digits) + Name + \".unity3d\"
+NullRelease             , 
+NullSet                 , 
+BGLoad                  , Load a Sprite asset and set it as a background
+BGRelease               , Remove the background image
+BGVisible               , Control visibility of the background image
+InfoAudioEco            , Set echo effect
+InfoAnimePlay           , Play an animation, no idea how to use this
+Fade                    , Fade the screen in or out of a color. (only affects the ADV scene)\nFade: in. out\nTime: time in seconds\nColor: color in almost any format, R,G,B or TryParseHtmlString\nType: front, (empty)
+SceneFade               , Fade the screen in or out of a color. (global effect)\nFade: in. out\nTime: time in seconds\nColor: color in almost any format, R,G,B or TryParseHtmlString\nCan optionally specify Texture2D to use as the fade screen
+SceneFadeRegulate       , Sets TextScenario.isSceneFadeRegulate to true or false. If true, the input is disabled while Scene.Fade is running. ADV.Fade is not affected by this.
+FadeWait                , Wait for fade to finish?\nType can be Scene for global fade and Filter for ADV fade
+FilterImageLoad         , Load Sprite to use as a filter
+FilterImageRelease      , 
+FadeSet                 , 
+FilterSet               , 
+Filter                  , 
+ImageLoad               , 
+ImageRelease            , 
+EjaculationEffect       , [insert male lenny face here]
+EcstacyEffect           , [insert female lenny face here]
+EcstacySyncEffect       , [insert two lenny faces having a good time together here]
+CrossFade               , 
+BlurEffect              , 
+DOFTarget               , Set target of depth of field effect to a character with number No.
+SepiaEffect             , My eyes
+CameraActive            , Don\'t use, will make some plugins unhappy
+CameraAspect            , 
+CameraChange            , Switch to camera with a GameObject that has name Name.
+CameraDirectionAdd      , 
+CameraDirectionSet      , 
+CameraLerpNullMove      , 
+CameraLerpNullSet       , 
+CameraLerpAdd           , 
+CameraLerpSet           , 
+CameraLerpAnimationAdd  , 
+CameraLerpAnimationSet  , 
+CameraLerpTargetAdd     , 
+CameraLerpTargetSet     , 
+CameraPositionAdd       , 
+CameraPositionSet       , 
+CameraRotationAdd       , 
+CameraRotationSet       , 
+CameraDefault           , Reset the camera position and rotation.
+CameraParent            , 
+CameraNull              , 
+CameraTarget            , 
+CameraTargetFront       , 
+CameraTargetCharacter   , 
+CameraReset             , 
+CameraLock              , True by default, if set to false user can move the camera freely during the ADV scene.\nCan\'t left click the ADV box to progress when disabled, have to press Enter or click the play button at bottom. Could be used together with Wait.\nCamera position is not restored after reenabling the lock, use CameraDefault to reset the camera position and rotation.
+CameraGetFov            , Save camera field of view to a variable with key Variable.
+CameraSetFov            , Set field of effect of current camera, 23 is the devault for ADV event
+BGMPlay                 , 
+BGMStop                 , 
+EnvPlay                 , 
+EnvStop                 , 
+SE2DPlay                , 
+SE2DStop                , 
+SE3DPlay                , 
+SE3DStop                , 
+CharaCreate             , Create an ADV character with number No from a heroine number ReadNo. \nThe heroine has to be passed in the arguments when starting the ADV scene. Heroine IDs are calculated like this: (index * -1) - 2\nShould be followed by CharaActive and optionally any expression and pose changes.
+CharaFixCreate          , Create an ADV character from a TextAsset
+CharaMobCreate          , Create a background ADV character from a TextAsset
+CharaDelete             , 
+CharaStand              , Change where the character stands. Same as setting Stand position in CharaActive.\nStand: Left, CenterLeft, Center, CenterRight, Right (some of these have variations with _01 added at the end), Base2D (a closer Center)
+CharaStandFind          , Move character to a position of some object
+CharaPositionAdd        , 
+CharaPositionSet        , 
+CharaPositionLocalAdd   , 
+CharaPositionLocalSet   , 
+CharaMotion             , Play an animation clip on character number No. Only State is required, rest is optional.\nState: name of the animation state on the character\'s animator (e.g. Stand_00_00)\nSetting rest of the arguments will load a different RuntimeAnimatorController into the character\'s animator. By default animator at abdata\adv\motion\controller\adv\00.unity3d > cf_adv_00_00 is used, so check it for available clips. You can preview the clips in SB3U.
+CharaMotionDefault      , 
+CharaMotionWait         , 
+CharaMotionLayerWeight  , 
+CharaMotionSetParam     , 
+CharaMotionIKSetPartner , 
+CharaExpression         , Set expression of character number No. Leave fields empty to not change them. Some of these need state names while others work with numbers. Check Commands.Base.CharaExpression source for details.
+CharaFixEyes            , True to prevent character from blinking
+CharaFixMouth           , True to prevent character from opening the mouth
+CharaExpressionIcon     , Add an expression icon to character No. Key is name of the asset inside of the assetbundle in adv/faceicon/icon/
+CharaGetShape           , 
+CharaCoordinate         , Change character clothes to a specified coordinate.\nType: School01, School02, Gym, Swim, Club, Plain, Pajamas
+CharaClothState         , Set undress state of a part of clothing.\nKind is a ClothesKind: top, bot, bra, shorts, gloves, panst, socks, shoes_inner, shoes_outer\nState: 0 - clothed. 1 2 - partial, 3 - off
+CharaSiruState          , Set cum stain state.\nParts is a SiruParts\nState: 0 - none, 1 - some, 2 - a lot
+CharaVoicePlay          , 
+CharaVoiceStop          , 
+CharaVoiceStopAll       , 
+CharaVoiceWait          , 
+CharaVoiceWaitAll       , 
+CharaLookEyes           , Change eye angle of character No. Same as the look controls in character maker.
+CharaLookEyesTarget     , 
+CharaLookEyesTargetChara, Make character\'s eyes look at another character.\nKey is what part of the body to look at, it should be a value of RefObjKey
+CharaLookNeck           , Change head position of character No. Same as the head position and amount controls in character maker.
+CharaLookNeckTarget     , 
+CharaLookNeckTargetChara, Make character\'s head look at another character.\nKey is what part of the body to look at, it should be a value of RefObjKey
+CharaLookNeckSkip       , 
+CharaItemCreate         , 
+CharaItemDelete         , 
+CharaItemAnime          , 
+CharaItemFind           , 
+EventCGSetting          , 
+EventCGRelease          , 
+EventCGNext             , 
+MotionLoad              , 
+ExpLoad                 , 
+Chara2DCreate           , 
+Chara2DDelete           , 
+Chara2DStand            , 
+Chara2DPositionAdd      , 
+Chara2DPositionSet      , 
+ObjectCreate            , 
+ObjectLoad              , 
+ObjectDelete            , 
+ObjectPosition          , 
+ObjectRotation          , 
+ObjectScale             , 
+ObjectParent            , 
+ObjectComponent         , 
+ObjectAnimeParam        , 
+MoviePlay               , 
+CharaActive             , Can hide a character and change their psition on screen. Setting Stand is the same as using CharaStand.\nStand: Left, CenterLeft, Center, CenterRight, Right (some of these have variations with _01 added at the end), Base2D (a closer Center)
+CharaVisible            , 
+CharaColor              , 
+CharaParam              , 
+CharaChange             , Change current character and optionally load vars from this character.
+CharaNameGet            , 
+CharaEvent              , 
+HeroineCallNameChange   , 
+HeroineFinCG            , 
+HeroineParam            , 
+PlayerParam             , 
+CycleChange             , 
+WeekChange              , 
+MapChange               , 
+MapUnload               , 
+MapVisible              , 
+MapObjectActive         , 
+DayTimeChange           , 
+GetGatePos              , 
+CameraLookAt            , 
+MozVisible              , 
+LookAtDankonAdd         , 
+LookAtDankonRemove      , 
+HMotionShakeAdd         , 
+HMotionShakeRemove      , 
+HitReaction             , 
+AddPosture              , 
+AddCollider             , 
+ColliderSetActive       , 
+AddNavMeshAgent         , 
+NavMeshAgentSetActive   , 
+BundleCheck             , Check if file or manifest exists
+CharaPersonal           , 
+HNamaOK                 , 
+HNamaNG                 , 
+CameraShakePos          , 
+CameraShakeRot          , 
+Prob                    , 
+Probs                   , 
+FormatVAR               , 
+CharaKaraokePlay        , 
+CharaKaraokeStop        , 
+Task                    , 
+TaskWait                , 
+TaskEnd                 , 
+ParameterFile           , 
+Log                     , 
+HSafeDaySet             , 
+HDangerDaySet           , 
+HeroineWeddingInfo      , 
+CameraLightOffset       , 
+CharaSetShape           , 
+CharaCoordinateChange   , Change character clothes to a coordinate inside a TextAsset
+CharaShoesChange        , Change shoes type between indoors and outdoors\nType: In, Out
+CameraAnimeLoad         , Load Animator for the character
+CameraAnimePlay         , 
+CameraAnimeWait         , 
+CameraAnimeLayerWeight  , 
+CameraAnimeSetParam     , 
+CameraAnimeRelease      , 
+CameraLightActive       , 
+CameraLightAngle        , 
+InfoAudio               , 
+CharaCreateEmpty        , Seems useless? Creates a dummy character, maybe you could load a chafile onto it somehow
+CharaCreateDummy        , Seems useless? Creates a dummy character
+CharaFixCreateDummy     , Seems useless? Creates a dummy character
+CharaMobCreateDummy     , Seems useless? Creates a dummy character
+ReplaceLanguage         , 

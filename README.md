@@ -1,2 +1,13 @@
-# PluginTemplate
-Template for a generic plugin for Illusion games. Replace the readme and code in the src folder to make your own plugin.
+# ADV Editor
+A tool for editing and creating ADV scenes in some Illusion games. Use together with utilities [here](https://github.com/IllusionMods/IllusionModdingAPI/blob/master/doc/KKAPI.MainGame.md#eventutils) to create and run your own custom text scenarios.
+
+This is intended only for modders and shouldn't be used by normal users.
+
+## How to use
+Install latest BepInEx, BepisPlugins and KKAPI (at least v1.18) and extract the release into your game directory.
+
+Alternatively you can use it with the ScriptEngine plugin - clone the repository, change it to Debug, update build path to point to your game's bepinex\scripts folder, and build it.
+
+You open the editor by default by pressing LShift + Pause. You can change this in plugin settings. Drag bottom right corner of windows to resize them.
+
+Command descriptions are editable and are saved inside bepinex\config\CommandDescriptions.txt - please submit any updates you make to these descriptions so that everyone can benefit.

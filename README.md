@@ -11,3 +11,6 @@ Alternatively you can use it with the ScriptEngine plugin - clone the repository
 You open the editor by default by pressing LShift + Pause. You can change this in plugin settings. Drag bottom right corner of windows to resize them.
 
 Command descriptions are editable and are saved inside bepinex\config\CommandDescriptions.txt - please submit any updates you make to these descriptions so that everyone can benefit.
+
+## Screenshots
+![preview](https://user-images.githubusercontent.com/39247311/115297254-4add1c80-a15c-11eb-93c0-cbf810269294.PNG)

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.CodeDom;
 using System.Globalization;
 using System.Linq;
 using ADV;
 using BepInEx.Logging;
 using HarmonyLib;
 using KKAPI.Utilities;
+using Microsoft.CSharp;
 using RuntimeUnityEditor.Core.Inspector.Entries;
 using UnityEngine;
 
@@ -248,7 +250,7 @@ namespace KK_ADVeditor
 
         private static string WriteToCode(ScenarioData.Param param)
         {
-            var argStr = string.Join(", ", param.Args.Select(y => '"' + y + '"').ToArray());
+            var argStr = string.Join(", ", UnconvertArgs(param).Select(y => '"' + y + '"').ToArray());
             if (argStr.Length > 0) argStr = ", " + argStr;
             return
                 $"list.Add(Program.Transfer.Create({param.Multi.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}, Command.{param.Command}{argStr}));";
@@ -256,9 +258,34 @@ namespace KK_ADVeditor
 
         private static string WriteToCsv(ScenarioData.Param param)
         {
-            var argStr = string.Join(",", param.Args.Select(y => '"' + y + '"').ToArray());
+            var argStr = string.Join(",", UnconvertArgs(param).Select(y => '"' + y + '"').ToArray());
             if (argStr.Length > 0) argStr = "," + argStr;
             return $"\"{param.Command}\",\"{param.Multi}\"{argStr}";
+        }
+
+        private static string[] UnconvertArgs(ScenarioData.Param param)
+        {
+            if (param.Command == Command.VAR || param.Command == Command.RandomVar)
+            {
+                try
+                {
+                    var copy = param.Args.ToArray();
+                    var t = Type.GetType(param.Args[0]);
+
+                    if (t == typeof(int)) copy[0] = "int";
+                    else if (t == typeof(float)) copy[0] = "float";
+                    else if (t == typeof(string)) copy[0] = "string";
+                    else if (t == typeof(bool)) copy[0] = "bool";
+
+                    return copy;
+                }
+                catch (Exception e)
+                {
+                    AdvEditorPlugin.Logger.LogWarning($"Could not unconvert arguments of {param.Command} - {string.Join(", ", param.Args)} because of exception: {e}");
+                }
+            }
+
+            return param.Args;
         }
 
         private static void ExpandArgsArray(ScenarioData.Param commandInfo, int addCount)

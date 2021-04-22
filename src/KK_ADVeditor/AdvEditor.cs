@@ -70,17 +70,24 @@ namespace KK_ADVeditor
             }
 
             var scenario = CurrentScenario;
-            var commands = CurrentScenario.CommandPacks.Where(FilterPack);
 
-            var commandPacksCount = CurrentScenario.CommandPacks.Count;
+            if (scenario == null || scenario.CommandPacks.IsNullOrEmpty())
+            {
+                GUILayout.Label("Nothing to show at this time. Trigger an ADV scene to see its commands.");
+                return;
+            }
+
+            var commands = scenario.CommandPacks.Where(FilterPack);
+
+            var commandPacksCount = scenario.CommandPacks.Count;
             //if (commandPacksCount == 0)
             //{
             //    Enabled = false;
             //    return;
             //}
 
-            var currentLine = Mathf.Clamp(CurrentScenario.CurrentLine, 0, commandPacksCount - 1);
-            var currentPack = commandPacksCount == 0 ? null : CurrentScenario.CommandPacks[currentLine];
+            var currentLine = Mathf.Clamp(scenario.CurrentLine, 0, commandPacksCount - 1);
+            var currentPack = commandPacksCount == 0 ? null : scenario.CommandPacks[currentLine];
 
             GUILayout.BeginVertical(GUI.skin.box);
             {
@@ -163,16 +170,16 @@ namespace KK_ADVeditor
                     {
                         GUILayout.BeginHorizontal();
                         {
-                            var commandIndex = CurrentScenario.CommandPacks.IndexOf(commandInfo);
+                            var commandIndex = scenario.CommandPacks.IndexOf(commandInfo);
                             var cmd = AdvCommandInfo.TryGetCommand(commandInfo.Command);
 
                             if (GUILayout.Button("X", GUILayout.ExpandWidth(false)))
                             {
                                 // If the removed command is before current line, adjust current line to still point to the same command
                                 if (commandIndex < currentLine)
-                                    CurrentScenario.CurrentLine = currentLine; // CurrentScenario.CurrentLine has -1 in getter but not in setter
+                                    scenario.CurrentLine = currentLine; // CurrentScenario.CurrentLine has -1 in getter but not in setter
 
-                                CurrentScenario.CommandPacks.RemoveAt(commandIndex);
+                                scenario.CommandPacks.RemoveAt(commandIndex);
                                 GUILayout.EndHorizontal(); // Avoid layout errors
                                 break;
                             }
@@ -199,7 +206,7 @@ namespace KK_ADVeditor
 
                             if (GUILayout.Button(">", GUILayout.ExpandWidth(false)))
                             {
-                                CurrentScenario.CurrentLine = commandIndex + 1;
+                                scenario.CurrentLine = commandIndex + 1;
                                 _gotoListClicked = true;
                             }
 
@@ -459,6 +466,12 @@ namespace KK_ADVeditor
         {
             var scenario = CurrentScenario;
 
+            if (scenario == null || scenario.commandController == null)
+            {
+                GUILayout.Label("No scenario loaded");
+                return;
+            }
+
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label("Inspect: ");
@@ -522,6 +535,7 @@ namespace KK_ADVeditor
             GUILayout.EndHorizontal();
 
             var controller = scenario.commandController;
+            if (controller.Characters == null) return;
             foreach (var characterData in controller.Characters)
             {
                 if (_searchVarStr != "" &&
@@ -567,10 +581,14 @@ namespace KK_ADVeditor
             }
             GUILayout.EndHorizontal();
 
+            if (scenario.heroineList == null) return;
+
             for (var index = 0; index < scenario.heroineList.Count; index++)
             {
                 var charaIndex = -index - 2;
                 var heroine = scenario.heroineList[index];
+
+                if (heroine == null) continue;
 
                 if (_searchVarStr != "" &&
                     charaIndex.ToString().IndexOf(_searchVarStr, StringComparison.OrdinalIgnoreCase) < 0 &&

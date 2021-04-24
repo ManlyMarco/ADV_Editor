@@ -16,10 +16,14 @@ namespace KK_ADVeditor
         private static Exception PreventAdvCrash(Exception __exception, ScenarioData.Param item)
         {
             string GetCommandStr() => string.Join(" | ", item.Output().Skip(2).ToArray());
-
             if (__exception != null)
             {
-                AdvEditorPlugin.Logger.Log(LogLevel.Error | LogLevel.Message, $"Crash when running command {item.Command}, check log for details. State might be corrupted!");
+                var commandInfo = AdvCommandInfo.TryGetCommand(item.Command);
+                string commandName = item.Command.ToString();
+                if (commandInfo != null)
+                    commandName = commandInfo.CommandName;
+
+                AdvEditorPlugin.Logger.Log(LogLevel.Error | LogLevel.Message, $"Crash when running command {commandName}, check log for details. State might be corrupted!");
                 AdvEditorPlugin.Logger.Log(LogLevel.Error, $"Crash when parsing ADV command:\n{GetCommandStr()}\nSwallowing exception to prevent softlock, *fix this before distributing or people's games will crash*:\n{__exception}");
             }
 

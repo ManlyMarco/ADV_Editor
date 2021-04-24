@@ -291,6 +291,19 @@ namespace KK_ADVeditor
                     AdvEditorPlugin.Logger.LogWarning($"Could not unconvert arguments of {param.Command} - {string.Join(", ", param.Args)} because of exception: {e}");
                 }
             }
+            else if (param.Command == Command.IF)
+            {
+                var val = param.Args.SafeGet(1);
+                if (int.TryParse(val, out var intval))
+                {
+                    var copy = param.Args.ToArray();
+                    if (intval >= 0 && intval < Illusion.Utils.Comparer.STR.Length)
+                        copy[1] = Illusion.Utils.Comparer.STR[intval];
+                    else if (intval == Illusion.Utils.Comparer.STR.Length)
+                        copy[1] = "check";
+                    return copy;
+                }
+            }
 
             return param.Args;
         }

@@ -19,6 +19,8 @@ namespace KK_ADVeditor
         {
             Command = command;
             CommandName = command.ToString();
+            if (!Enum.IsDefined(typeof(Command), command))
+                CommandName = commandBase.GetType().Name;
 
             CommandBase = commandBase;
             ArgsLabel = commandBase.ArgsLabel ?? new string[0];
@@ -47,14 +49,17 @@ namespace KK_ADVeditor
 
         private static IEnumerable<AdvCommandInfo> GatherCommands()
         {
-            var values = Enum.GetValues(typeof(Command));
-            foreach (Command value in values)
+            int largestValue = Enum.GetValues(typeof(Command)).Cast<Command>().Select(value => (int)value).Max();
+
+            for (int i = 1; ; i++)
             {
-                if (value == Command.None) continue;
+                var value = (Command)i;
 
                 var command = CommandList.CommandGet(value);
                 if (command != null)
                     yield return new AdvCommandInfo(value, command);
+                else if (i > largestValue)
+                    break;
                 else
                     AdvEditorPlugin.Logger.LogWarning("Unsupported ADV.Command: " + value);
             }

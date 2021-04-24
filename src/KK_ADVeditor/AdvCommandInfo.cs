@@ -13,9 +13,10 @@ namespace KK_ADVeditor
         public readonly CommandBase CommandBase;
         public readonly string[] ArgsDefault;
         public readonly string[] ArgsLabel;
+        public readonly bool IsCustom;
         public string Description;
 
-        public AdvCommandInfo(Command command, CommandBase commandBase)
+        public AdvCommandInfo(Command command, CommandBase commandBase, bool isCustom)
         {
             Command = command;
             CommandName = command.ToString();
@@ -25,6 +26,8 @@ namespace KK_ADVeditor
             CommandBase = commandBase;
             ArgsLabel = commandBase.ArgsLabel ?? new string[0];
             ArgsDefault = commandBase.ArgsDefault;
+
+            IsCustom = isCustom;
 
             UpdateDescription();
         }
@@ -49,21 +52,22 @@ namespace KK_ADVeditor
 
         private static IEnumerable<AdvCommandInfo> GatherCommands()
         {
-            int largestValue = Enum.GetValues(typeof(Command)).Cast<Command>().Select(value => (int)value).Max();
+            var largestValue = Enum.GetValues(typeof(Command)).Cast<int>().Max();
 
-            for (int i = 1; ; i++)
+            for (var i = 1; ; i++)
             {
                 var value = (Command)i;
 
+                // Try CommandGet first range check later, in order to support custom commands
+                var aboveLargest = i > largestValue;
                 var command = CommandList.CommandGet(value);
                 if (command != null)
-                    yield return new AdvCommandInfo(value, command);
-                else if (i > largestValue)
+                    yield return new AdvCommandInfo(value, command, aboveLargest);
+                else if (aboveLargest)
                     break;
                 else
                     AdvEditorPlugin.Logger.LogWarning("Unsupported ADV.Command: " + value);
             }
         }
-
     }
 }

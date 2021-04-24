@@ -363,6 +363,8 @@ namespace KK_ADVeditor
                         {
                             if (_currentCommandInfo == commandInfo)
                                 GUI.color = Color.green;
+                            else if (_currentCommandInfo.IsCustom)
+                                GUI.color = Color.yellow;
 
                             if (GUILayout.Button(commandInfo.CommandName))
                             {
@@ -418,6 +420,13 @@ namespace KK_ADVeditor
                             }
 
                             _currentCommandInfo.Description = GUILayout.TextArea(_currentCommandInfo.Description, GUI.skin.label);
+
+                            if (_currentCommandInfo.IsCustom)
+                            {
+                                GUI.color = Color.yellow;
+                                GUILayout.Label("This is a custom Command added by a plugin. Be careful when using this, you will have to make sure the plugin is loaded and might need to reference it.");
+                                GUI.color = Color.white;
+                            }
                         }
                         GUILayout.EndScrollView();
                     }

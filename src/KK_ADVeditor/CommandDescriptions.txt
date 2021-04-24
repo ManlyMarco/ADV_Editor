@@ -1,6 +1,6 @@
 VAR                     , Sets a Value into the TextScenario.Vars dictionary under a key Variable. Type must be either int, float, bool or string. Value must be able to be converted to the proper Type or it will crash.
 RandomVar               , Sets a random value between Min and Max into the TextScenario.Vars dictionary under a key Variable. Type must be either int, float, bool or string. Min and Max must be able to be converted to the proper Type or it will crash. Other variables can be used for all parameters.
-Calc                    , 1 - Load value of key Answer from TextScenario.Vars. If doesn\'t exist, get a default value. 2 - Apply Formula to the value from dictionary and Value. 3 - Store the result of the Formula back to the dictionary under the key Answer.\nThe Formula can be: 0 = assign, 1 = add, 2 = subtract, 3 = multiply, 4 = divide (seems to be buggy? need to set this manually in adv command list?) Other variables can be used for all parameters.
+Calc                    , 1 - Load value of key Answer from TextScenario.Vars. If doesn\'t exist, get a default value.\n2 - Apply Formula to the value from dictionary and Value.\n3 - Store the result of the Formula back to the dictionary under the key Answer.\nThe Formula can be: 0 = assign, 1 = add, 2 = subtract, 3 = multiply, 4 = divide (seems to be buggy? need to set this manually in adv command list?) Other variables can be used for all parameters.
 Clamp                   , Sets a Value into the TextScenario.Vars dictionary under a key Variable. Value is clamped between Min and Max. Other variables can be used for all parameters (use their keys instead of numbers then).
 Min                     , Set the smaller of two floats A and B to variable of key Answer. Other variables can be used for all parameters (use their keys instead of numbers then).
 Max                     , Set the larger of two floats A and B to variable of key Answer. Other variables can be used for all parameters (use their keys instead of numbers then).
@@ -11,7 +11,7 @@ LerpV3                  , Lerp except on Vector3s. Value is float used as positi
 LerpAngleV3             , Lerp except on Vector3s. Value is float used as position. Min and Max are names of V3s in scenario.commandController.V3Dic. Answer is key to which store the result in V3Dic.
 Tag                     , A tag that can be jumped to by other commands like IF, Choice or Jump. This command is otherwise ignored.
 Format                  , Store result of string.Format(\"Format\", Args) to variable of key Variable. Args is a comma separated list of arguments.
-IF                      , Based on variables Left and Right, jump to Tag under either True or False. Center specifies the comparison type: 0 - ==, 1 - !=, 2 - >=, 3 - <=, 4 - >, 5 - <, 6 - check if a variable with key Left exists.
+IF                      , Based on variables Left and Right, jump to Tag under either True or False. Center specifies the comparison type:  \"==\" (0)\n\"!=\" (1)\n\">=\" (2)\n\"<=\" (3)\n\">\" (4)\n\"<\" (5)\n\"check\" (6): check if a variable with key Left exists.
 Switch                  , If variable Key is the same as Case, then jump to Tag. You can add multiple CaseTag arguments.
 Text                    , Show Text in the ADV dialog box with Name as person speaking. Color assigned to Name will be used.
 Voice                   , Play a voice clip on character number No. Personality and Pitch can be left empty to use the character\'s values. Must be set to Multi and be used before a Text command to work.\nVoices are stored in abdata\sound\data\pcm\c00 (00 = id of the personality). Inside that, different folders correspond to different game modes (adm is generic sounds, adv is spoken lines, h is h scene stuff, namelist is nicknames). You can preview the audio clips and see their names in SB3U.
@@ -84,7 +84,7 @@ CameraTargetCharacter   ,
 CameraReset             , 
 CameraLock              , True by default, if set to false user can move the camera freely during the ADV scene.\nCan\'t left click the ADV box to progress when disabled, have to press Enter or click the play button at bottom. Could be used together with Wait.\nCamera position is not restored after reenabling the lock, use CameraDefault to reset the camera position and rotation.
 CameraGetFov            , Save camera field of view to a variable with key Variable.
-CameraSetFov            , Set field of effect of current camera, 23 is the devault for ADV event
+CameraSetFov            , Set field of effect of current camera, 23 is the default for ADV event
 BGMPlay                 , 
 BGMStop                 , 
 EnvPlay                 , 
@@ -122,7 +122,7 @@ CharaVoiceStop          ,
 CharaVoiceStopAll       , 
 CharaVoiceWait          , 
 CharaVoiceWaitAll       , 
-CharaLookEyes           , Change eye angle of character No. Same as the look controls in character maker.
+CharaLookEyes           , Change eye angle of character No. Same as the look controls in character maker.\n\n0 through 7
 CharaLookEyesTarget     , 
 CharaLookEyesTargetChara, Make character\'s eyes look at another character.\nKey is what part of the body to look at, it should be a value of RefObjKey
 CharaLookNeck           , Change head position of character No. Same as the head position and amount controls in character maker.
@@ -153,7 +153,7 @@ ObjectParent            ,
 ObjectComponent         , 
 ObjectAnimeParam        , 
 MoviePlay               , 
-CharaActive             , Can hide a character and change their psition on screen. Setting Stand is the same as using CharaStand.\nStand: Left, CenterLeft, Center, CenterRight, Right (some of these have variations with _01 added at the end), Base2D (a closer Center)
+CharaActive             , Can hide a character and change their position on screen. Setting Stand is the same as using CharaStand.\nStand: Left, CenterLeft, Center, CenterRight, Right (some of these have variations with _01 added at the end), Base2D (a closer Center)
 CharaVisible            , 
 CharaColor              , 
 CharaParam              , 
@@ -164,7 +164,7 @@ HeroineCallNameChange   ,
 HeroineFinCG            , 
 HeroineParam            , 
 PlayerParam             , 
-CycleChange             , 
+CycleChange             , Change the current part of the cycle to one of the following.\n\nName must be one of:\nWakeUp\nMorning\nGotoSchool\nHR1\nLesson1\nLunchTime\nLesson2\nHR2\nStaffTime\nAfterSchool\nGotoMyHouse\nMyHouse
 WeekChange              , 
 MapChange               , 
 MapUnload               , 
@@ -184,7 +184,7 @@ AddCollider             ,
 ColliderSetActive       , 
 AddNavMeshAgent         , 
 NavMeshAgentSetActive   , 
-BundleCheck             , Check if file or manifest exists
+BundleCheck             , Check if file or manifest exists.
 CharaPersonal           , 
 HNamaOK                 , 
 HNamaNG                 , 

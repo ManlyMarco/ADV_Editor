@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -18,8 +16,10 @@ namespace KK_ADVeditor
 {
     [BepInPlugin(GUID, PluginName, Version)]
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
-    [BepInProcess("Koikatu")]
-    [BepInProcess("Koikatsu Party")]
+    [BepInProcess(KoikatuAPI.GameProcessName)]
+#if KK
+    [BepInProcess(KoikatuAPI.GameProcessNameSteam)]
+#endif
     public class AdvEditorPlugin : BaseUnityPlugin
     {
         public const string GUID = "KK_ADVeditor";
@@ -79,45 +79,7 @@ namespace KK_ADVeditor
             Instance = this;
             Logger = base.Logger;
 
-
-            //if (!TomlTypeConverter.CanConvert(typeof(Rect))) //todo remove and use one in kkapi
-            //{
-            //    TomlTypeConverter.AddConverter(typeof(Rect), new TypeConverter
-            //    {
-            //        ConvertToObject = (s, type) =>
-            //        {
-            //            var result = new Rect();
-            //            if (s != null)
-            //            {
-            //                var cleaned = s.Trim('{', '}').Replace(" ", "");
-            //                foreach (var part in cleaned.Split(','))
-            //                {
-            //                    var parts = part.Split(':');
-            //                    if (parts.Length == 2 && float.TryParse(parts[1], out var value))
-            //                    {
-            //                        var id = parts[0].Trim('"');
-            //                        if (id == "x") result.x = value;
-            //                        else if (id == "y") result.y = value;
-            //                        // Check z and w in case something was using Vector4 to serialize a Rect before
-            //                        else if (id == "width" || id == "z") result.width = value;
-            //                        else if (id == "height" || id == "w") result.height = value;
-            //                    }
-            //                }
-            //            }
-            //            return result;
-            //        },
-            //        ConvertToString = (o, type) =>
-            //        {
-            //            var rect = (Rect)o;
-            //            return string.Format(CultureInfo.InvariantCulture,
-            //                "{{ \"x\":{0}, \"y\":{1}, \"width\":{2}, \"height\":{3} }}",
-            //                rect.x, rect.y, rect.width, rect.height);
-            //        }
-            //    });
-            //}
-
-
-            var windDescr = new ConfigDescription("Drag the window's bottom right corner to change these.", null, new ConfigurationManagerAttributes { IsAdvanced = true });
+            var windDescr = new ConfigDescription("Drag bottom right corner of the window to change these.", null, new ConfigurationManagerAttributes { IsAdvanced = true });
             AddWinRect = Config.Bind("Windows", "Editor window rect", new Rect(10, 10, 500, 350), windDescr);
             ListWinRect = Config.Bind("Windows", "List window rect", new Rect(510, 10, 700, 350), windDescr);
             VarWinRect = Config.Bind("Windows", "Inspect window rect", new Rect(1220, 10, 370, 350), windDescr);
@@ -127,8 +89,13 @@ namespace KK_ADVeditor
             _hi = Harmony.CreateAndPatchAll(typeof(PreventAdvCrashHooks), GUID);
 
 #if DEBUG
-            if (Game.Instance?.actScene?.isEventNow == true)
+#if KK
+            if (Manager.Game.Instance?.actScene?.isEventNow == true)
                 _advEditor.Enabled = true;
+#elif KKS
+            if (ActionScene.initialized && ActionScene.instance.isEventNow)
+                _advEditor.Enabled = true;
+#endif
 #endif
         }
 

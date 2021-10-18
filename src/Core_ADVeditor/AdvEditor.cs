@@ -5,7 +5,9 @@ using System.Linq;
 using ADV;
 using BepInEx.Logging;
 using HarmonyLib;
+using KKAPI.MainGame;
 using KKAPI.Utilities;
+using Manager;
 using Microsoft.CSharp;
 using RuntimeUnityEditor.Core.Inspector.Entries;
 using UnityEngine;
@@ -15,7 +17,7 @@ namespace KK_ADVeditor
     public class AdvEditor
     {
         private TextScenario _currentScenario;
-        private TextScenario CurrentScenario => _currentScenario != null ? _currentScenario : _currentScenario = Manager.Game.Instance?.actScene?.AdvScene?.Scenario;
+        private TextScenario CurrentScenario => _currentScenario != null ? _currentScenario : _currentScenario = GameAPI.GetADVScene().Scenario;
 
         public bool Enabled { get; set; }
 
@@ -189,7 +191,7 @@ namespace KK_ADVeditor
                                 GUI.color = Color.green;
 
                                 // GetLastRect only works during repaint
-                                if (Event.current.type == EventType.repaint && _previousLine != currentLine)
+                                if (Event.current.type == EventType.Repaint && _previousLine != currentLine)
                                 {
                                     _previousLine = currentLine;
                                     if (!_gotoListClicked && _autoScrollToCurrent)
@@ -498,7 +500,11 @@ namespace KK_ADVeditor
             {
                 GUILayout.Label("Inspect: ");
                 if (GUILayout.Button("Manager.Game"))
-                    SendToInspector("Manager.Game", Manager.Game.Instance);
+#if KK
+                    SendToInspector("Manager.Game", Game.Instance);
+#elif KKS
+                    SendToInspector("Manager.Game", Game.instance);
+#endif
                 if (GUILayout.Button("TextScenario"))
                     SendToInspector("TextScenario", scenario);
                 if (GUILayout.Button("Controller"))

@@ -13,8 +13,14 @@ namespace KK_ADVeditor
         /// </summary>
         [HarmonyFinalizer]
         [HarmonyPatch(typeof(CommandList), nameof(CommandList.Add), typeof(ScenarioData.Param), typeof(int))]
-        private static Exception PreventAdvCrash(Exception __exception, ScenarioData.Param item)
+#if KK
+private static Exception PreventAdvCrash(Exception __exception, ScenarioData.Param item)
         {
+#elif KKS
+        private static Exception PreventAdvCrash(Exception __exception, ScenarioData.Param param)
+        {
+            var item = param;
+#endif
             string GetCommandStr() => string.Join(" | ", item.Output().Skip(2).ToArray());
             if (__exception != null)
             {

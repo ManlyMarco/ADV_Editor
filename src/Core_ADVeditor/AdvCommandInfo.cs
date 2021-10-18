@@ -60,7 +60,11 @@ namespace KK_ADVeditor
 
                 // Try CommandGet first range check later, in order to support custom commands
                 var aboveLargest = i > largestValue;
+#if KK
                 var command = CommandList.CommandGet(value);
+#elif KKS
+                var command = CommandGenerator.Create(value);
+#endif
                 if (command != null)
                     yield return new AdvCommandInfo(value, command, aboveLargest);
                 else if (aboveLargest)

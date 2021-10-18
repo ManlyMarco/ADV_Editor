@@ -5,7 +5,16 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_ADVeditor", "KK_ADVeditor\KK_ADVeditor.csproj", "{646A1928-537A-4618-A529-4C44DC1FBEAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KKS_ADVeditor", "KKS_ADVeditor\KKS_ADVeditor.csproj", "{EF994EA6-7330-4939-A84D-5B58870B3402}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Core_ADVeditor", "Core_ADVeditor\Core_ADVeditor.shproj", "{88EE542A-1791-474F-A5AC-7D469A08C78D}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Core_ADVeditor\Core_ADVeditor.projitems*{646a1928-537a-4618-a529-4c44dc1fbeab}*SharedItemsImports = 4
+		Core_ADVeditor\Core_ADVeditor.projitems*{88ee542a-1791-474f-a5ac-7d469a08c78d}*SharedItemsImports = 13
+		Core_ADVeditor\Core_ADVeditor.projitems*{ef994ea6-7330-4939-a84d-5b58870b3402}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -15,6 +24,10 @@ Global
 		{646A1928-537A-4618-A529-4C44DC1FBEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{646A1928-537A-4618-A529-4C44DC1FBEAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{646A1928-537A-4618-A529-4C44DC1FBEAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF994EA6-7330-4939-A84D-5B58870B3402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF994EA6-7330-4939-A84D-5B58870B3402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF994EA6-7330-4939-A84D-5B58870B3402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF994EA6-7330-4939-A84D-5B58870B3402}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

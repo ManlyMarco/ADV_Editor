@@ -24,7 +24,7 @@ namespace KK_ADVeditor
     {
         public const string GUID = "KK_ADVeditor";
         public const string PluginName = "ADV Scene Editor";
-        public const string Version = "1.1";
+        public const string Version = "1.2";
 
         private const string DescrFileName = "CommandDescriptions.txt";
 

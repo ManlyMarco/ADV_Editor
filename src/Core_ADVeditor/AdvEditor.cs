@@ -14,6 +14,9 @@ namespace KK_ADVeditor
 {
     public class AdvEditor
     {
+        private static ManualLogSource Logger => AdvEditorPlugin.Logger;
+        private static bool SolidBackground => AdvEditorPlugin.SolidBackground.Value;
+
         private TextScenario _currentScenario;
         private TextScenario CurrentScenario => _currentScenario != null ? _currentScenario : _currentScenario = GameAPI.GetADVScene()?.Scenario;
 
@@ -28,9 +31,16 @@ namespace KK_ADVeditor
                 return;
             }
 
-            _addWinRect = GUILayout.Window(4207123, _addWinRect, TesterWindow, "ADV Command Tester");
+            _addWinRect = GUILayout.Window(4207123, _addWinRect, TesterWindow, "ADV Command Creator");
             _listWinRect = GUILayout.Window(4207124, _listWinRect, CommandListWindow, "ADV Command List");
             _varWinRect = GUILayout.Window(4207125, _varWinRect, VariableWindow, "ADV Inspector");
+
+            if (SolidBackground)
+            {
+                IMGUIUtils.DrawSolidBox(_addWinRect);
+                IMGUIUtils.DrawSolidBox(_listWinRect);
+                IMGUIUtils.DrawSolidBox(_varWinRect);
+            }
         }
 
         #region List window
@@ -106,7 +116,7 @@ namespace KK_ADVeditor
             {
                 GUILayout.BeginHorizontal();
                 {
-                    GUILayout.BeginHorizontal(GUI.skin.box);
+                    GUILayout.BeginHorizontal(GUI.skin.box, GUILayout.ExpandWidth(true));
                     {
                         GUILayout.Label("Search:", GUILayout.ExpandWidth(false));
 
@@ -114,10 +124,10 @@ namespace KK_ADVeditor
 
                         if (_searchListOnlyText)
                             GUI.enabled = false;
-                        _searchListHidePlayerInit = GUILayout.Toggle(_searchListHidePlayerInit, "Hide P init");
-                        _searchListHideHeroineInit = GUILayout.Toggle(_searchListHideHeroineInit, "Hide H init");
+                        _searchListHidePlayerInit = GUILayout.Toggle(_searchListHidePlayerInit, "Hide P init", GUILayout.ExpandWidth(false));
+                        _searchListHideHeroineInit = GUILayout.Toggle(_searchListHideHeroineInit, "Hide H init", GUILayout.ExpandWidth(false));
                         GUI.enabled = true;
-                        _searchListOnlyText = GUILayout.Toggle(_searchListOnlyText, "Only Text");
+                        _searchListOnlyText = GUILayout.Toggle(_searchListOnlyText, "Only Text", GUILayout.ExpandWidth(false));
                     }
                     GUILayout.EndHorizontal();
 
@@ -738,7 +748,5 @@ namespace KK_ADVeditor
         }
 
         #endregion
-
-        private static ManualLogSource Logger => AdvEditorPlugin.Logger;
     }
 }

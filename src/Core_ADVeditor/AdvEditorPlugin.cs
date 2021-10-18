@@ -38,6 +38,7 @@ namespace KK_ADVeditor
         internal static ConfigEntry<Rect> VarWinRect;
         internal static ConfigEntry<Rect> ListWinRect;
         internal static ConfigEntry<KeyboardShortcut> OpenShortcut;
+        internal static ConfigEntry<bool> SolidBackground;
 
         private void OnDestroy()
         {
@@ -83,6 +84,7 @@ namespace KK_ADVeditor
             AddWinRect = Config.Bind("Windows", "Editor window rect", new Rect(10, 10, 500, 350), windDescr);
             ListWinRect = Config.Bind("Windows", "List window rect", new Rect(510, 10, 700, 350), windDescr);
             VarWinRect = Config.Bind("Windows", "Inspect window rect", new Rect(1220, 10, 370, 350), windDescr);
+            SolidBackground = Config.Bind("Windows", "Solid window background", true, "Make window background solid for easier reading. If false, windows are transparent.");
 
             OpenShortcut = Config.Bind("General", "Open ADV editor", new KeyboardShortcut(KeyCode.Pause, KeyCode.LeftShift));
 

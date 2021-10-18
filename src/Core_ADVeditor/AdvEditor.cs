@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Globalization;
 using System.Linq;
 using ADV;
@@ -8,7 +7,6 @@ using HarmonyLib;
 using KKAPI.MainGame;
 using KKAPI.Utilities;
 using Manager;
-using Microsoft.CSharp;
 using RuntimeUnityEditor.Core.Inspector.Entries;
 using UnityEngine;
 
@@ -17,7 +15,7 @@ namespace KK_ADVeditor
     public class AdvEditor
     {
         private TextScenario _currentScenario;
-        private TextScenario CurrentScenario => _currentScenario != null ? _currentScenario : _currentScenario = GameAPI.GetADVScene().Scenario;
+        private TextScenario CurrentScenario => _currentScenario != null ? _currentScenario : _currentScenario = GameAPI.GetADVScene()?.Scenario;
 
         public bool Enabled { get; set; }
 
@@ -43,7 +41,7 @@ namespace KK_ADVeditor
             set => AdvEditorPlugin.ListWinRect.Value = value;
         }
         private string _searchStrList = "";
-        private bool _searchListHideUnimportant = true;
+        private bool _searchListHidePlayerInit = true, _searchListHideHeroineInit = true;
         private bool _searchListOnlyText;
 
         private int _previousLine;
@@ -52,25 +50,6 @@ namespace KK_ADVeditor
 
         private void CommandListWindow(int id)
         {
-            bool FilterPack(ScenarioData.Param x)
-            {
-                if (_searchStrList != "" &&
-                    x.Command.ToString().IndexOf(_searchStrList, StringComparison.OrdinalIgnoreCase) < 0 &&
-                    (x.Args == null || !x.Args.Any(y => y.IndexOf(_searchStrList, StringComparison.OrdinalIgnoreCase) >= 0)))
-                    return false;
-
-                if (_searchListHideUnimportant &&
-                    (x.Command == Command.VAR && x.Args.SafeGet(1).StartsWith("P_", StringComparison.Ordinal) ||
-                     x.Command == Command.Replace && x.Args.SafeGet(0).StartsWith("P", StringComparison.Ordinal)))
-                    return false;
-
-                if (_searchListOnlyText &&
-                    x.Command != Command.Text)
-                    return false;
-
-                return true;
-            }
-
             var scenario = CurrentScenario;
 
             if (scenario == null || scenario.CommandPacks.IsNullOrEmpty())
@@ -79,7 +58,39 @@ namespace KK_ADVeditor
                 return;
             }
 
-            var commands = scenario.CommandPacks.Where(FilterPack);
+            var initCommandCount = scenario.CommandPacks
+                .TakeWhile(x => x.Command == Command.Replace ||
+                                x.Command == Command.VAR ||
+                                x.Command == Command.CameraSetFov ||
+                                x.Command == Command.HeroineCallNameChange)
+                .Count();
+
+            var commands = scenario.CommandPacks.Where((x, i) =>
+            {
+                if (_searchStrList != "" &&
+                    x.Command.ToString().IndexOf(_searchStrList, StringComparison.OrdinalIgnoreCase) < 0 &&
+                    (x.Args == null || !x.Args.Any(y => y.IndexOf(_searchStrList, StringComparison.OrdinalIgnoreCase) >= 0)))
+                    return false;
+
+                if (i < initCommandCount)
+                {
+                    if (_searchListHidePlayerInit &&
+                        (x.Command == Command.VAR && x.Args.SafeGet(1).StartsWith("P_", StringComparison.Ordinal) ||
+                         x.Command == Command.Replace && x.Args.SafeGet(0).StartsWith("P", StringComparison.Ordinal)))
+                        return false;
+
+                    if (_searchListHideHeroineInit &&
+                        (x.Command == Command.VAR && x.Args.SafeGet(1).StartsWith("H_", StringComparison.Ordinal) ||
+                         x.Command == Command.Replace && x.Args.SafeGet(0).StartsWith("H", StringComparison.Ordinal)))
+                        return false;
+                }
+
+                if (_searchListOnlyText &&
+                    x.Command != Command.Text)
+                    return false;
+
+                return true;
+            });
 
             var commandPacksCount = scenario.CommandPacks.Count;
             //if (commandPacksCount == 0)
@@ -101,7 +112,11 @@ namespace KK_ADVeditor
 
                         _searchStrList = GUILayout.TextField(_searchStrList, GUILayout.ExpandWidth(true));
 
-                        _searchListHideUnimportant = GUILayout.Toggle(_searchListHideUnimportant, "Hide spam");
+                        if (_searchListOnlyText)
+                            GUI.enabled = false;
+                        _searchListHidePlayerInit = GUILayout.Toggle(_searchListHidePlayerInit, "Hide P init");
+                        _searchListHideHeroineInit = GUILayout.Toggle(_searchListHideHeroineInit, "Hide H init");
+                        GUI.enabled = true;
                         _searchListOnlyText = GUILayout.Toggle(_searchListOnlyText, "Only Text");
                     }
                     GUILayout.EndHorizontal();

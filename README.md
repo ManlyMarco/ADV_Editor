@@ -10,6 +10,8 @@ Alternatively you can use it with the ScriptEngine plugin - clone the repository
 
 You open the editor by default by pressing LShift + Pause. You can change this in plugin settings. Drag bottom right corner of windows to resize them.
 
+Check the basic guide in [the wiki here](https://github.com/ManlyMarco/ADV_Editor/wiki/How-to-edit-events-with-ADV-Editor-basic-guide).
+
 Command descriptions are editable and are saved inside bepinex\config\CommandDescriptions.txt - please submit any updates you make to these descriptions so that everyone can benefit.
 
 ## Screenshots
